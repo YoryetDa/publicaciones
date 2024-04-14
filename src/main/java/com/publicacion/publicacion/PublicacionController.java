@@ -26,33 +26,32 @@ public class PublicacionController {
     private PublicacionRepository publicacionRepository;
 
     // Endpoint para obtener todas las publicaciones almacenadas
-    @GetMapping
+    @GetMapping //publicaciones
     public List<Publicacion> getAllPublicaciones() {
-        return publicacionRepository.findAll();  // Consulta todas las publicaciones usando JPA
+        List<Publicacion> listaPublicaciones = publicacionRepository.findAll();
+        // Se asegura de calcular el promedio para cada publicación antes de devolverlas
+        listaPublicaciones.forEach(publicacion -> publicacion.calcularPromedioCalificaciones());
+        return listaPublicaciones;
     }
 
     // Endpoint para obtener una publicación específica por su ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getPublicacionById(@PathVariable Long id) {
-        // Intenta encontrar la publicación por ID
         Optional<Publicacion> publicacion = publicacionRepository.findById(id);
-
-        // Si la publicación existe, calcula el promedio de calificaciones y devuelve los detalles
         if (publicacion.isPresent()) {
             Publicacion actualPublicacion = publicacion.get();
-            double promedio = actualPublicacion.calcularPromedioCalificaciones();  // Calcula el promedio de calificaciones
-            return ResponseEntity.ok(new PublicacionDetallada(actualPublicacion, promedio));  // Retorna la publicación y su promedio
+            double promedio = actualPublicacion.calcularPromedioCalificaciones(); // Calcula el promedio de calificaciones.
+            return ResponseEntity.ok(new PublicacionDetallada(actualPublicacion, promedio)); // Retorna la publicación y su promedio.
         } else {
-            return ResponseEntity.notFound().build();  // Si no se encuentra, retorna un 404 Not Found
+            return ResponseEntity.notFound().build(); // Si no se encuentra, retorna un 404 Not Found.
         }
     }
-
-    // Clase interna para formatear la respuesta con detalles de una publicación y su promedio de calificaciones
+    // Clase auxiliar para representar la publicación con detalles adicionales
     private static class PublicacionDetallada {
         private Publicacion publicacion;
         private double promedioCalificaciones;
 
-        PublicacionDetallada(Publicacion publicacion, double promedioCalificaciones) {
+        public PublicacionDetallada(Publicacion publicacion, double promedioCalificaciones) {
             this.publicacion = publicacion;
             this.promedioCalificaciones = promedioCalificaciones;
         }
@@ -65,26 +64,24 @@ public class PublicacionController {
             return promedioCalificaciones;
         }
     }
-
-    // Endpoint para crear una nueva publicación
-    @PostMapping
-    public Publicacion createPublicacion(@RequestBody Publicacion publicacion) {
-        return publicacionRepository.save(publicacion);  // Guarda la nueva publicación en la base de datos
-    }
-
-    // Endpoint para actualizar una publicación existente
+     // Endpoint para actualizar una publicación existente
     @PutMapping("/{id}")
     public ResponseEntity<Publicacion> updatePublicacion(@PathVariable Long id, @RequestBody Publicacion publicacionDetails) {
-        Optional<Publicacion> publicacionData = publicacionRepository.findById(id);  // Busca la publicación por ID
+        // Intenta encontrar la publicación existente por ID
+        Optional<Publicacion> publicacionData = publicacionRepository.findById(id);
 
         if (publicacionData.isPresent()) {
-            Publicacion updatedPublicacion = publicacionData.get();  // Obtiene la publicación existente
-            updatedPublicacion.setTitulo(publicacionDetails.getTitulo());  // Actualiza el título
-            updatedPublicacion.setContenido(publicacionDetails.getContenido());  // Actualiza el contenido
-            publicacionRepository.save(updatedPublicacion);  // Guarda los cambios en la base de datos
-            return ResponseEntity.ok(updatedPublicacion);  // Retorna la publicación actualizada
+            Publicacion updatedPublicacion = publicacionData.get();
+            // Actualiza el título y el contenido de la publicación con los valores recibidos
+            updatedPublicacion.setTitulo(publicacionDetails.getTitulo());
+            updatedPublicacion.setContenido(publicacionDetails.getContenido());
+            // Guarda la publicación actualizada en la base de datos
+            publicacionRepository.save(updatedPublicacion);
+            // Retorna la publicación actualizada con código de estado 200 OK
+            return ResponseEntity.ok(updatedPublicacion);
         } else {
-            return ResponseEntity.notFound().build();  // Si no se encuentra, retorna un 404 Not Found
+            // Retorna un código de estado 404 Not Found si la publicación no se encuentra
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -92,10 +89,27 @@ public class PublicacionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletePublicacion(@PathVariable Long id) {
         try {
-            publicacionRepository.deleteById(id);  // Elimina la publicación por ID
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);  // Retorna un 204 No Content
+            // Intenta eliminar la publicación por ID
+            publicacionRepository.deleteById(id);
+            // Retorna un código de estado 204 No Content si la eliminación es exitosa
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // Maneja posibles errores internos
+            // Retorna un código de estado 500 Internal Server Error si ocurre algún error durante la eliminación
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    // Crear publicacion 
+    @PostMapping 
+    public ResponseEntity<Publicacion> createPublicacion(@RequestBody Publicacion newPublicacion) {
+        try {
+            // Guarda la nueva publicación en la base de datos
+            Publicacion savedPublicacion = publicacionRepository.save(newPublicacion);
+            // Retorna la publicación guardada con un código de estado 201 Created
+            return new ResponseEntity<>(savedPublicacion, HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Retorna un código de estado 500 Internal Server Error si ocurre algún error durante la creación
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
