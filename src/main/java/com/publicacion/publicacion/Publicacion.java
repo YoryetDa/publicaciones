@@ -1,4 +1,5 @@
 package com.publicacion.publicacion;
+import com.publicacion.publicacion.models.Comentario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +67,12 @@ public class Publicacion {
     // calcula el promedio de las calificaciones guardads en calificaciones,
     // suma de todas las calificaciones dividida por la cantidad.
     public double calcularPromedioCalificaciones() {
-        if (comentarios.isEmpty()) {
-            return 0.0; // si la variable esta vacia que devuelva 0.0 (tolerancia a errores)
+        if (this.comentarios.isEmpty()) {
+            return 0.0; // Si no hay comentarios, retorna 0.0 para evitar división por cero
         }
-        double suma = comentarios.stream()
-                                 .mapToInt(Comentario::getNota)
-                                 .sum();
-        return suma / comentarios.size();
+        double suma = this.comentarios.stream()
+                                      .mapToInt(Comentario::getNota) // Asegúrate de que Comentario tiene un método getNota()
+                                      .sum();
+        return suma / this.comentarios.size();
     }
 }
