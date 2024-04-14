@@ -1,4 +1,5 @@
 package com.publicacion.publicacion;
+import com.publicacion.publicacion.models.Publicacion;
 
 // Importaciones necesarias para el funcionamiento del controlador
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.publicacion.publicacion.models.Publicacion;
 import com.publicacion.publicacion.repositories.PublicacionRepository;
 
 import java.util.List;
