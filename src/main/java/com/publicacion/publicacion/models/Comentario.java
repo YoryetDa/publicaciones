@@ -1,8 +1,7 @@
 package com.publicacion.publicacion.models;
 
-
-import jakarta.persistence.*;;
-
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "comentarios")
@@ -16,8 +15,10 @@ public class Comentario {
     private String mensaje;
     private Integer nota;
 
+    // Relación ManyToOne con Publicacion. Usamos JsonBackReference para prevenir la recursividad en JSON.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publicacion_id")
+    @JsonBackReference
     private Publicacion publicacion;
 
     public Comentario() {
