@@ -3,6 +3,8 @@ package com.publicacion.publicacion.models;
 import jakarta.persistence.*;
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "publicaciones")
 public class Publicacion {
@@ -14,7 +16,9 @@ public class Publicacion {
     private String titulo;
     private String contenido;
 
+    // Relación OneToMany con Comentario. Usamos JsonManagedReference para evitar la recursividad en JSON.
     @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Comentario> comentarios = new ArrayList<>();
 
     public Publicacion() {
@@ -30,10 +34,10 @@ public class Publicacion {
     public List<Comentario> getComentarios() { return comentarios; }
     public void setComentarios(List<Comentario> comentarios) { this.comentarios = comentarios; }
 
-    // Método para calcular el promedio de las calificaciones
+    // Método para calcular el promedio de las calificaciones de los comentarios.
     public double calcularPromedioCalificaciones() {
         if (comentarios.isEmpty()) {
-            return 0.0; // Retorna 0.0 si no hay comentarios para evitar división por cero
+            return 0.0; // Retorna 0.0 si no hay comentarios.
         }
         double suma = comentarios.stream()
                                  .mapToInt(Comentario::getNota)
