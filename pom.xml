@@ -62,9 +62,7 @@
                         <artifactId>lombok</artifactId>
                     </exclude>
                 </excludes>
-                <jvmArguments>
-                    -Doracle.net.tns_admin=C:\\My Web Sites
-                </jvmArguments>
+                
             </configuration>
         </plugin>
     </plugins>
