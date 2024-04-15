@@ -80,7 +80,7 @@ public class PublicacionController {
             // Retorna la publicación actualizada con código de estado 200 OK
             return ResponseEntity.ok(updatedPublicacion);
         } else {
-            // Retorna un código de estado 404 Not Found si la publicación no se encuentra
+            // Retorna un código        de estado 404 Not Found si la publicación no se encuentra
             return ResponseEntity.notFound().build();
         }
     }
