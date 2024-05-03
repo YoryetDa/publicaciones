@@ -1,0 +1,8 @@
+com\publicacion\publicacion\PublicacionApplication.class
+com\publicacion\publicacion\repositories\ComentarioRepository.class
+com\publicacion\publicacion\controllers\ComentarioController.class
+com\publicacion\publicacion\repositories\PublicacionRepository.class
+com\publicacion\publicacion\models\Comentario.class
+com\publicacion\publicacion\controllers\PublicacionController.class
+com\publicacion\publicacion\controllers\PublicacionController$PublicacionDetallada.class
+com\publicacion\publicacion\models\Publicacion.class
