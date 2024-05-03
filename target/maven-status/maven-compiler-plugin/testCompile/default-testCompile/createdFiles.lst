@@ -1,0 +1,3 @@
+com\publicacion\publicacion\models\ComentarioTest.class
+com\publicacion\publicacion\models\PublicacionTest.class
+com\publicacion\publicacion\controllers\ComentarioControllerTest.class
