@@ -4,8 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.BDDMockito.*;
-import static org.hamcrest.Matchers.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import com.publicacion.publicacion.models.Publicacion;
 import com.publicacion.publicacion.repositories.ComentarioRepository;
 import com.publicacion.publicacion.repositories.PublicacionRepository;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @WebMvcTest(ComentarioController.class)
@@ -41,7 +38,7 @@ public class ComentarioControllerTest {
         publicacion.setId(1L);
         Comentario comentario = new Comentario();
         comentario.setId(1L);
-        comentario.setMensaje("Muy interesante");
+        comentario.setMensaje("Muy testing");
         comentario.setNota(5);
     
         // 2. Configuración de Mocks
@@ -51,8 +48,8 @@ public class ComentarioControllerTest {
         // 3. Ejecución del test
         mockMvc.perform(post("/publicaciones/{publicacionId}/comentarios", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"mensaje\":\"Muy interesante\", \"nota\":5}"))
+                        .content("{\"mensaje\":\"Muy testing\", \"nota\":5}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.mensaje").value("Muy interesante"));
+                .andExpect(jsonPath("$.mensaje").value("Muy testing"));
     }
 }

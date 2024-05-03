@@ -18,7 +18,7 @@ public class PublicacionTest {
         Comentario comentario = new Comentario();
         comentario.setId(1L);
         comentario.setAutor("Juan");
-        comentario.setMensaje("Muy buen artículo");
+        comentario.setMensaje("Muy test artículo");
         comentario.setNota(5);
 
         List<Comentario> comentarios = new ArrayList<>();
